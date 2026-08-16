@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wiliwow.github.io/sons-du-jardin/sitemap.xml
+Sitemap: https://atlasis-digital.github.io/sons-du-jardin/sitemap.xml
