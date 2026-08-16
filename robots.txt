@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wiliwow.github.io/sons-du-jardin/sitemap.xml
