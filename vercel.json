@@ -1,9 +1,9 @@
 {
-  "buildCommand": "npm ci && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/reserve.ts": { "runtime": "nodejs@20" },
-    "api/contact.ts": { "runtime": "nodejs@20" }
+    "api/reserve.ts": { "runtime": "nodejs@18" },
+    "api/contact.ts": { "runtime": "nodejs@18" }
   },
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
