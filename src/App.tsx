@@ -382,6 +382,41 @@ function Story() {
   );
 }
 
+function Footer() {
+  const { lang } = useI18n();
+  const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
+  const fb = contact.socials?.facebook;
+  const ig = contact.socials?.instagram;
+  return (
+    <footer className="site-footer">
+      <div className="container footer-grid">
+        <div>
+          <h3 className="footer-brand">{t('footer_title')}</h3>
+          <p className="footer-tag">{t('footer_tagline')}</p>
+        </div>
+        <div>
+          <h4 className="footer-h">{t('footer_contact')}</h4>
+          <ul className="footer-list">
+            <li>📍 {contact.address}</li>
+            <li>📞 <a href={`tel:${contact.phone}`}>{contact.phoneDisplay}</a></li>
+            <li>🟢 <a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+            <li>★ {contact.rating} ({contact.reviews} avis)</li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="footer-h">{t('footer_follow')}</h4>
+          <div className="footer-socials">
+            {fb && <a href={fb} target="_blank" rel="noopener noreferrer" aria-label="Facebook">🌐 Facebook</a>}
+            {ig && <a href={ig} target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷 Instagram</a>}
+          </div>
+          <a href={contact.mapsDir} target="_blank" rel="noopener noreferrer" className="btn btn-ghost footer-map">→ {lang === 'ar' ? 'اتجاهات' : lang === 'en' ? 'Directions' : 'Itinéraire'}</a>
+        </div>
+      </div>
+      <div className="footer-bottom">© {new Date().getFullYear()} {contact.name}</div>
+    </footer>
+  );
+}
+
 function Shell() {
   const { lang, setLang } = useI18n();
   const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
@@ -433,6 +468,7 @@ function Shell() {
         <Route path="/reservation" element={<Reservation />} />
         <Route path="*" element={<Home />} />
       </Routes>
+      <Footer />
       <button className="share-fab" onClick={share} title="Partager">↗</button>
       <a href={wa(`${t('reserve')} — ${contact.name}`)} target="_blank" rel="noopener noreferrer" className="sticky-cta">● {t('reserve')}</a>
     </div>

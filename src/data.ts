@@ -46,6 +46,11 @@ export const contact = {
   reviews: '5',
   mapsEmbed: 'https://www.google.com/maps?q=Les+sons+du+jardin+Skanes+Monastir&output=embed',
   mapsDir: 'https://www.google.com/maps/dir/?api=1&destination=Les+sons+du+jardin+Skanes+Monastir',
+  socials: {
+    facebook: 'https://facebook.com/',
+    instagram: 'https://instagram.com/',
+    // Ajoute ici les vrais liens quand tu les as
+  },
 };
 
 // JSON-LD pour le référencement local
@@ -170,6 +175,10 @@ export const i18n = {
     ],
   },
   faq_title: { fr: 'Questions fréquentes', en: 'FAQ', ar: 'أسئلة شائعة' },
+  footer_title: { fr: 'Les sons du jardin', en: 'Les sons du jardin', ar: 'أصوات الحديقة' },
+  footer_tagline: { fr: 'Maison d\'hôtes · Skanes, Monastir', en: 'Guesthouse · Skanes, Monastir', ar: 'نزل · سقانس، المنستير' },
+  footer_contact: { fr: 'Contact', en: 'Contact', ar: 'اتصل' },
+  footer_follow: { fr: 'Suivez-nous', en: 'Follow us', ar: 'تابعنا' },
   arrival: { fr: 'Date d\'arrivée', en: 'Arrival Date', ar: 'تاريخ الوصول' },
   departure: { fr: 'Date de départ', en: 'Departure Date', ar: 'تاريخ المغادرة' },
   time: { fr: 'Heure', en: 'Time', ar: 'الوقت' },
