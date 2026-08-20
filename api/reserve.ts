@@ -41,6 +41,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
+  // Anti-chevauchement : refuser si une période réservée (en_attente/confirme) chevauche
+  try {
+    const overlapCheck = await fetch(
+      `${SUPABASE_URL}/rest/v1/reservations?select=id,dates,status`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+        },
+      }
+    );
+    if (!overlapCheck.ok) {
+      res.status(500).json({ ok: false, error: 'Erreur vérification disponibilité' });
+      return;
+    }
+    const existing = await overlapCheck.json() as Array<{ id: string; dates: string; status: string }>;
+    // Parse "arrivée: YYYY-MM-DD à HH:MM | départ: YYYY-MM-DD à HH:MM"
+    const parseDates = (s: string): { a: string; d: string } | null => {
+      const m = (s || '').match(/arrivée:\s*(\d{4}-\d{2}-\d{2})[\s\S]*?départ:\s*(\d{4}-\d{2}-\d{2})/);
+      if (!m) return null;
+      return { a: m[1], d: m[2] };
+    };
+    const overlaps = existing.filter((r) => {
+      if (r.status === 'annule') return false;
+      const p = parseDates(r.dates);
+      if (!p) return false;
+      // Chevauchement : arrivée < départ existant ET départ > arrivée existant
+      return arrivalDate < p.d && departureDate > p.a;
+    });
+    if (overlaps.length > 0) {
+      res.status(409).json({ ok: false, error: 'Cette période est déjà réservée. Choisissez d\'autres dates.' });
+      return;
+    }
+  } catch (e: any) {
+    res.status(500).json({ ok: false, error: e.message });
+    return;
+  }
+
   if (String(name).length > 120 || String(phone).length > 40 || String(message || '').length > 2000) {
     res.status(400).json({ ok: false, error: 'Champ trop long' });
     return;
