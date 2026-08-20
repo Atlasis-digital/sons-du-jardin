@@ -42,8 +42,11 @@ export const contact = {
   whatsapp: '21698277380',
   address: 'Avenue Hedi Khfecha, Skanes 5000, Monastir, Tunisie',
   city: 'Skanes, Monastir',
-  rating: '4.6',
-  reviews: '5',
+  rating: '4.81',
+  reviews: '60',
+  // Note : note principale = Airbnb (plus représentatif). La note Google (4.6/5) reste dispo via le lien.
+  googleRating: '4.6',
+  googleReviews: '5',
   mapsEmbed: 'https://www.google.com/maps?q=Les+sons+du+jardin+Skanes+Monastir&output=embed',
   mapsDir: 'https://www.google.com/maps/dir/?api=1&destination=Les+sons+du+jardin+Skanes+Monastir',
   socials: {
@@ -60,7 +63,7 @@ export const jsonLd = {
   name: contact.name,
   address: { '@type': 'PostalAddress', streetAddress: 'Avenue Hedi Khfecha, Skanes 5000', addressLocality: 'Monastir', addressCountry: 'TN' },
   telephone: contact.phone,
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.6', reviewCount: '5' },
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.81', reviewCount: '60' },
   url: 'https://atlasis-digital.github.io/sons-du-jardin/',
 };
 
