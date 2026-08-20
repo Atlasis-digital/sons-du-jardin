@@ -49,6 +49,30 @@ function Gallery() {
   );
 }
 
+// Aperçu galerie sur l'accueil : 2 tuiles seulement (le reste va dans l'onglet /gallery)
+function GalleryPreview() {
+  const { lang } = useI18n();
+  const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
+  const preview = gallery.slice(0, 2);
+  const shapes = ['bento-big', 'bento-h'];
+  return (
+    <section style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
+      <div className="container">
+        <div className="bento" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          {preview.map((g, i) => (
+            <Reveal key={i} className={shapes[i] ?? 'bento-sq'}>
+              <img className="bento-img" src={g.src} alt="" loading="lazy" />
+            </Reveal>
+          ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+          <Link to="/gallery" className="btn btn-ghost">{lang === 'ar' ? 'معرض كامل' : lang === 'en' ? 'Full gallery' : 'Voir la galerie'} →</Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Reviews() {
   const { lang } = useI18n();
   const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
@@ -436,7 +460,7 @@ function Home() {
         </div>
       </section>
 
-      <Gallery />
+      <GalleryPreview />
       <Reviews />
       <Faq />
       <Reservation />
