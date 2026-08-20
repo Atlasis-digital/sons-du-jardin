@@ -48,20 +48,24 @@ export function getEvents(): EventMeta[] {
 }
 
 export function getEvent(slug: string): { meta: EventMeta; html: string } | null {
-  const raw = mdModules[`../../content/events/${slug}.md`];
-  if (!raw) return null;
-  const { data, body } = parseFrontmatter(raw);
-  return {
-    meta: {
-      slug,
-      title: data.title || slug,
-      date: data.date || '',
-      dateDisplay: data.dateDisplay || data.date || '',
-      excerpt: data.excerpt || '',
-      cover: data.cover || data.image || '',
-    },
-    html: marked.parse(body) as string,
-  };
+  for (const [path, raw] of Object.entries(mdModules)) {
+    const s = path.split('/').pop()!.replace(/\.md$/, '');
+    if (s === slug) {
+      const { data, body } = parseFrontmatter(raw);
+      return {
+        meta: {
+          slug,
+          title: data.title || slug,
+          date: data.date || '',
+          dateDisplay: data.dateDisplay || data.date || '',
+          excerpt: data.excerpt || '',
+          cover: data.cover || data.image || '',
+        },
+        html: marked.parse(body) as string,
+      };
+    }
+  }
+  return null;
 }
 
 export function renderMd(md: string): string {
