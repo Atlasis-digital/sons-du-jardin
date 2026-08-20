@@ -113,6 +113,44 @@ function Reservation() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle');
   const [error, setError] = useState('');
 
+  // Calendrier de disponibilité
+  const [booked, setBooked] = useState<Array<{ a: string; d: string }>>([]);
+  const [calMonth, setCalMonth] = useState(() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); });
+
+  useEffect(() => {
+    fetch('/api/availability').then(r => r.json()).then(d => {
+      if (d.ok && Array.isArray(d.booked)) setBooked(d.booked);
+    }).catch(() => {});
+  }, []);
+
+  // Une date est "rouge" si elle tombe dans une période réservée
+  const isRed = (iso: string): boolean => {
+    const day = iso + 'T00:00:00';
+    return booked.some(b => {
+      const a = b.a + 'T00:00:00';
+      const d = b.d + 'T00:00:00';
+      return new Date(day) >= new Date(a) && new Date(day) <= new Date(d);
+    });
+  };
+  // Chevauchement d'une plage [start, end] avec une réservation
+  const rangeOverlaps = (start: string, end: string): boolean => {
+    if (!start || !end) return false;
+    return booked.some(b => new Date(start) < new Date(b.d + 'T00:00:00') && new Date(end) > new Date(b.a + 'T00:00:00'));
+  };
+
+  const pickDate = (iso: string) => {
+    if (isRed(iso)) { setError(lang === 'ar' ? 'هذا التاريخ محجوز' : lang === 'en' ? 'This date is booked' : 'Cette date est déjà réservée'); return; }
+    if (!arrivalDate || (arrivalDate && departureDate)) {
+      // nouvelle sélection : on repart sur arrivée
+      setArrivalDate(iso); setDepartureDate(''); setError('');
+    } else {
+      // on a une arrivée, on choisit le départ
+      if (iso <= arrivalDate) { setError(lang === 'ar' ? 'تاريخ المغادرة يجب أن يكون بعد الوصول' : lang === 'en' ? 'Departure must be after arrival' : 'La date de départ doit être après l\'arrivée'); return; }
+      if (rangeOverlaps(arrivalDate, iso)) { setError(lang === 'ar' ? 'هذه الفترة محجوزة' : lang === 'en' ? 'This period is booked' : 'Cette période est déjà réservée'); return; }
+      setDepartureDate(iso); setError('');
+    }
+  };
+
   const sendResa = async () => {
     if (!name || !tel || !arrivalDate || !departureDate) {
       setError(lang === 'ar' ? 'فضلاً أدخل التاريخين' : lang === 'en' ? 'Please fill both dates' : 'Veuillez remplir les deux dates');
@@ -120,6 +158,10 @@ function Reservation() {
     }
     if (departureDate <= arrivalDate) {
       setError(lang === 'ar' ? 'تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول' : lang === 'en' ? 'Departure must be after arrival' : 'La date de départ doit être après l\'arrivée');
+      return;
+    }
+    if (rangeOverlaps(arrivalDate, departureDate)) {
+      setError(lang === 'ar' ? 'هذه الفترة محجوزة' : lang === 'en' ? 'This period is booked' : 'Cette période est déjà réservée');
       return;
     }
     if (company && String(company).trim() !== '') return;
@@ -137,6 +179,28 @@ function Reservation() {
     } catch (e: any) { setError(e.message || 'Erreur'); setTimeout(() => setError(''), 3000); }
   };
 
+  // Rendu du calendrier (mois courant + navigation)
+  const monthDays = () => {
+    const y = calMonth.getFullYear(), m = calMonth.getMonth();
+    const first = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const cells: Array<{ iso: string; day: number; red: boolean; inRange: boolean; isStart: boolean; isEnd: boolean }> = [];
+    const start = new Date(y, m, 1);
+    for (let i = 0; i < (first === 0 ? 6 : first - 1); i++) cells.push({ iso: '', day: 0, red: false, inRange: false, isStart: false, isEnd: false });
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(y, m, d);
+      const iso = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const red = isRed(iso);
+      const inRange = arrivalDate && departureDate && iso > arrivalDate && iso < departureDate;
+      const isStart = iso === arrivalDate;
+      const isEnd = iso === departureDate;
+      cells.push({ iso, day: d, red, inRange, isStart, isEnd });
+    }
+    return cells;
+  };
+
+  const monthName = calMonth.toLocaleDateString(lang === 'ar' ? 'ar' : lang === 'en' ? 'en' : 'fr', { month: 'long', year: 'numeric' });
+
   return (
     <section style={{ paddingTop: '8rem' }}>
       <div className="container">
@@ -147,10 +211,36 @@ function Reservation() {
             <input className="field" type="tel" placeholder={lang === 'ar' ? 'WhatsApp / هاتف' : 'WhatsApp / Tél'} value={tel} onChange={e => setTel(e.target.value)} />
             <input className="field" type="number" min="1" value={pers} onChange={e => setPers(e.target.value)} placeholder={lang === 'ar' ? 'عدد الضيوف' : 'Invités'} />
           </div>
+
+          {/* Calendrier de disponibilité */}
+          <div style={{ marginTop: '1.5rem', border: '1px solid #3a4632', borderRadius: '12px', padding: '1rem', background: '#1f2a1c' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
+              <button type="button" className="btn" style={{ padding: '0.3rem 0.8rem' }} onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1))}>‹</button>
+              <strong style={{ textTransform: 'capitalize' }}>{monthName}</strong>
+              <button type="button" className="btn" style={{ padding: '0.3rem 0.8rem' }} onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1))}>›</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', textAlign: 'center', fontSize: '0.8rem' }}>
+              {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => <div key={i} style={{ color: '#a9c39a', fontWeight: 600 }}>{d}</div>)}
+              {monthDays().map((c, i) => c.iso === ''
+                ? <div key={i} />
+                : <button type="button" key={i} disabled={c.red}
+                    onClick={() => pickDate(c.iso)}
+                    style={{
+                      padding: '0.5rem 0', borderRadius: '8px', border: '1px solid #3a4632', cursor: c.red ? 'not-allowed' : 'pointer',
+                      background: c.red ? '#5a2a1c' : c.isStart || c.isEnd ? 'var(--terracotta)' : c.inRange ? '#3a4632' : '#27331f',
+                      color: c.red ? '#ffb0a0' : c.isStart || c.isEnd ? '#fff' : 'var(--ink)',
+                    }}>{c.day}</button>
+              )}
+            </div>
+            <p style={{ fontSize: '0.75rem', color: '#a9c39a', marginTop: '0.6rem' }}>
+              🟥 = dates réservées · sélectionnez arrivée puis départ
+              {arrivalDate && !departureDate && ` · arrivée: ${arrivalDate}`}
+              {arrivalDate && departureDate && ` · ${arrivalDate} → ${departureDate}`}
+            </p>
+          </div>
+
           <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-            <label style={{ flex: '1 1 160px' }}>{t('arrival')}<input type="date" value={arrivalDate} onChange={e => setArrivalDate(e.target.value)} /></label>
             <label style={{ flex: '1 1 160px' }}>{t('arrival_time') || 'Heure arriv.'}<input type="time" value={arrivalTime} onChange={e => setArrivalTime(e.target.value)} /></label>
-            <label style={{ flex: '1 1 160px' }}>{t('departure')}<input type="date" value={departureDate} onChange={e => setDepartureDate(e.target.value)} /></label>
             <label style={{ flex: '1 1 160px' }}>{t('departure_time') || 'Heure départ'}<input type="time" value={departureTime} onChange={e => setDepartureTime(e.target.value)} /></label>
           </div>
           <textarea className="field" placeholder={lang === 'ar' ? 'رسالتك' : lang === 'en' ? 'Your message' : 'Message optionnel'} value={msg} onChange={e => setMsg(e.target.value)} style={{ marginTop: '1rem' }} />
