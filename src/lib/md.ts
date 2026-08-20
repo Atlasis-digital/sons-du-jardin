@@ -19,7 +19,13 @@ function parseFrontmatter(raw: string): { data: Record<string, string>; body: st
   const data: Record<string, string> = {};
   m[1].split('\n').forEach((line) => {
     const i = line.indexOf(':');
-    if (i > 0) data[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+    if (i > 0) {
+      const key = line.slice(0, i).trim();
+      let val = line.slice(i + 1).trim();
+      // Les URLs (http/https) contiennent ':' -> on reconstruit l'absolu si coupé
+      if (val.startsWith('//')) val = 'https:' + val;
+      data[key] = val;
+    }
   });
   return { data, body: m[2] };
 }
