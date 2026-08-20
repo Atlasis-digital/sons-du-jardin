@@ -134,6 +134,13 @@ body.dark { --bg: #181f15; --surface: #232c1d; --ink: #e8efe0; --muted: #a7b89a;
 body.dark .box, body.dark .box-clay { background: #1f271a; }
 body.dark .chip { background: #232c1d; border-color: #333f2b; }
 body.dark .res-form input, body.dark .field { background: #181f15; color: #e8efe0; border-color: #333f2b; }
+body.dark input[type="time"], body.dark input[type="date"] {
+  background: #181f15; color: #e8efe0; border: 1px solid #333f2b; border-radius: 10px;
+  padding: .75rem; font-family: inherit; color-scheme: dark;
+}
+/* icône horloge/calendrier native en mode sombre */
+body.dark input[type="time"]::-webkit-calendar-picker-indicator,
+body.dark input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .8; cursor: pointer; }
 body.dark .map-wrap iframe { --map-filter: invert(0.9) hue-rotate(180deg); }
 
 @media (min-width: 768px) { .sticky-cta { display: none; } .share-fab { display: none; } }
