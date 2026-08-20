@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from './i18n/I18nProvider';
-import { i18n, photos, contact, hoursDetail, promo, scrapedReviews, jsonLd } from './data';
+import { i18n, photos, contact, hoursDetail, promo, scrapedReviews, jsonLd, gallery, airbnbReviews, airbnbRating, airbnbCount } from './data';
 import { useSeo, JsonLd } from './seo';
 import { Events, EventDetail, Admin } from './posts';
 
@@ -31,19 +31,20 @@ function Gallery() {
   const { lang } = useI18n();
   const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
   const [zoom, setZoom] = useState<number | null>(null);
+  const shapeClass: Record<string, string> = { big: 'bento-big', h: 'bento-h', sq: 'bento-sq' };
   return (
     <section style={{ paddingTop: '8rem' }}>
       <div className="container">
         <h2 className="title display reveal" style={{ textAlign: 'center', marginBottom: '2rem' }}>{t('gallery_title')}</h2>
-        <div className="masonry">
-          {photos.map((src, i) => (
-            <Reveal key={i} delay={(i % 3) * 0.08}>
-              <img src={src} alt="" style={{ width: '100%', borderRadius: 14, cursor: 'zoom-in', marginBottom: 14, display: 'block' }} loading="lazy" onClick={() => setZoom(i)} />
+        <div className="bento">
+          {gallery.map((g, i) => (
+            <Reveal key={i} delay={(i % 4) * 0.06}>
+              <img className={`bento-img ${shapeClass[g.shape]}`} src={g.src} alt="" loading="lazy" style={{ cursor: 'zoom-in' }} onClick={() => setZoom(i)} />
             </Reveal>
           ))}
         </div>
       </div>
-      {zoom !== null && <div className="lightbox" onClick={() => setZoom(null)}><img src={photos[zoom]} alt="" /></div>}
+      {zoom !== null && <div className="lightbox" onClick={() => setZoom(null)}><img src={gallery[zoom].src} alt="" /></div>}
     </section>
   );
 }
@@ -57,12 +58,14 @@ function Reviews() {
       <div className="container" style={{ paddingBlock: '4rem' }}>
         <h2 className="title display reveal" style={{ textAlign: 'center', marginBottom: '1rem' }}>{t('reviews_title')}</h2>
         <div className="rule" style={{ margin: '0 auto 2rem' }} />
+        <p style={{ textAlign: 'center', marginBottom: '2rem', color: 'var(--muted)' }}>★ {airbnbRating} · {airbnbCount} avis · Airbnb</p>
         <div className="feature">
-          {scrapedReviews.map((r, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <div className="chip" style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.3rem', color: 'var(--gold)', letterSpacing: '2px' }}>{stars(r.rating)}</div>
-                <p style={{ fontSize: '.8rem', color: 'var(--muted)' }}>{r.date}</p>
+          {airbnbReviews.map((r, i) => (
+            <Reveal key={i} delay={i * 0.08}>
+              <div className="chip" style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '1.1rem', color: 'var(--gold)', letterSpacing: '2px', marginBottom: '.4rem' }}>{stars(r.rating)}</div>
+                <p style={{ fontSize: '.92rem', lineHeight: 1.5, margin: 0, color: 'var(--ink)' }}>{r.text}</p>
+                <p style={{ fontSize: '.8rem', color: 'var(--muted)', marginTop: '.6rem', marginBottom: 0 }}>— {r.name}</p>
               </div>
             </Reveal>
           ))}
