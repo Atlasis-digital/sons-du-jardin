@@ -10,7 +10,7 @@ import { Events, EventDetail, Admin } from './posts';
 const CLAY = 'linear-gradient(135deg, #dCE8D5, #e9dfce)';
 const wa = (msg: string) => `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(msg)}`;
 
-function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+function Reveal({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = React.useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -18,7 +18,7 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); io.disconnect(); } }, { threshold: 0.15 });
     io.observe(el); return () => io.disconnect();
   }, []);
-  return <div ref={ref} className={'reveal' + (inView ? ' in' : '')} style={{ transitionDelay: delay + 's' }}>{children}</div>;
+  return <div ref={ref} className={'reveal' + (inView ? ' in' : '') + (className ? ' ' + className : '')} style={{ transitionDelay: delay + 's' }}>{children}</div>;
 }
 
 function StatusBadge() {
@@ -38,8 +38,8 @@ function Gallery() {
         <h2 className="title display reveal" style={{ textAlign: 'center', marginBottom: '2rem' }}>{t('gallery_title')}</h2>
         <div className="bento">
           {gallery.map((g, i) => (
-            <Reveal key={i} delay={(i % 4) * 0.06}>
-              <img className={`bento-img ${shapeClass[g.shape]}`} src={g.src} alt="" loading="lazy" style={{ cursor: 'zoom-in' }} onClick={() => setZoom(i)} />
+            <Reveal key={i} delay={(i % 4) * 0.06} className={shapeClass[g.shape]}>
+              <img className="bento-img" src={g.src} alt="" loading="lazy" style={{ cursor: 'zoom-in' }} onClick={() => setZoom(i)} />
             </Reveal>
           ))}
         </div>
