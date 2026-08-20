@@ -71,7 +71,7 @@ function Reviews() {
           ))}
         </div>
         <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-          <a href={`https://search.google.com/local/reviews?placeid=&q=${encodeURIComponent(contact.name + ' ' + contact.city)}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">★ {contact.rating} ({contact.reviews}) · Google</a>
+          <a href={`https://search.google.com/local/reviews?placeid=&q=${encodeURIComponent(contact.name + ' ' + contact.city)}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">★ {contact.googleRating} ({contact.googleReviews}) · Voir sur Google</a>
         </p>
       </div>
     </section>
