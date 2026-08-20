@@ -3,7 +3,7 @@
 // Photos du lieu — import dynamique de tout le dossier (vraies photos Airbnb)
 const photoModules = import.meta.glob('./assets/photos/*.jpg', { eager: true, import: 'default' }) as Record<string, string>;
 // ordre curé : les meilleures vues en tete (hero, sections), le reste ensuite
-const priority = [15,77,28,1,4,201,9,10,3,5,26,202,27,30,43,63,64,203,69,70,74,76,79,204,12,16,18,21,22,205,33,34,35,36,38,206,40,45,48,52,55,207,58,60,62,66,68,208,71,73,75,78,80,209,81,82,83,84,85,210,86,87,88,89,90,211,91,92,93,94,95,212,96,97,98,99,100,213,101,102,103,104,105,214,106,107,108,109,110,215,111,2,6,7,8,216,11,13,14,17,19,217,20,23,24,25,29,218,31,32,37,39,41,219,42,44,46,47,49,50,51,53,54,56,57,59,61,65,67,72];
+const priority = [15,77,28,1,4,9,10,3,5,26,27,30,43,63,64,69,70,74,76,79,12,16,18,21,22,33,34,35,36,38,40,45,48,52,55,58,60,62,66,68,71,73,75,78,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,2,6,7,8,11,13,14,17,19,20,23,24,25,29,31,32,37,39,41,42,44,46,47,49,50,51,53,54,56,57,59,61,65,67,72];
 const allPaths = Object.keys(photoModules);
 const numOf = (p: string) => { const m = p.match(/airbnb_(\d+)\.jpg/); return m ? parseInt(m[1],10) : 999; };
 const inPriority = (n: number) => priority.indexOf(n);
@@ -16,6 +16,13 @@ export const photos: string[] = allPaths
     if (ib !== -1) return 1;
     return a.n - b.n;
   })
+  .map(x => photoModules[x.p]);
+
+// Photos du client (dossier Téléchargements) — affichées sur l'accueil, pas la pièce centrale
+export const clientPhotos: string[] = allPaths
+  .map(p => ({ p, n: numOf(p) }))
+  .filter(x => x.n >= 201 && x.n <= 219)
+  .sort((a, b) => a.n - b.n)
   .map(x => photoModules[x.p]);
 
 // Galerie curée (bento/tetris) : ~36 meilleures vues, formes melangées

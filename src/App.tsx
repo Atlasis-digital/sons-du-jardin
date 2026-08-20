@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useI18n } from './i18n/I18nProvider';
-import { i18n, photos, contact, hoursDetail, promo, scrapedReviews, jsonLd, gallery, airbnbReviews, airbnbRating, airbnbCount } from './data';
+import { i18n, photos, contact, hoursDetail, promo, scrapedReviews, jsonLd, gallery, clientPhotos, airbnbReviews, airbnbRating, airbnbCount } from './data';
 import { useSeo, JsonLd } from './seo';
 import { Events, EventDetail, Admin } from './posts';
 
@@ -49,19 +49,19 @@ function Gallery() {
   );
 }
 
-// Aperçu galerie sur l'accueil : 8 images dans le meme layout bento que la galerie (le reste va dans /gallery)
+// Aperçu galerie sur l'accueil : TOUTES les photos du client (dossier Téléchargements)
 function GalleryPreview() {
   const { lang } = useI18n();
   const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
-  const preview = gallery.slice(0, 8);
   const shapeClass: Record<string, string> = { big: 'bento-big', h: 'bento-h', sq: 'bento-sq' };
+  const shapeCycle = (i: number) => (['big', 'h', 'sq', 'sq'] as const)[i % 4];
   return (
     <section style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
       <div className="container">
         <div className="bento">
-          {preview.map((g, i) => (
-            <Reveal key={i} delay={(i % 4) * 0.06} className={shapeClass[g.shape]}>
-              <img className="bento-img" src={g.src} alt="" loading="lazy" />
+          {clientPhotos.map((src, i) => (
+            <Reveal key={i} delay={(i % 4) * 0.06} className={shapeClass[shapeCycle(i)]}>
+              <img className="bento-img" src={src} alt="" loading="lazy" />
             </Reveal>
           ))}
         </div>
@@ -95,7 +95,7 @@ function Reviews() {
           ))}
         </div>
         <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-          <a href={`https://search.google.com/local/reviews?placeid=&q=${encodeURIComponent(contact.name + ' ' + contact.city)}`} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">★ {contact.googleRating} ({contact.googleReviews}) · Voir sur Google</a>
+          <a href="https://www.airbnb.fr/rooms/52581659?source_impression_id=p3_1787254883_P3N3RomhlxUOzhPt" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">★ {airbnbRating} ({airbnbCount}) · Voir les avis sur Airbnb</a>
         </p>
       </div>
     </section>
