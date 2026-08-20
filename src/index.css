@@ -170,6 +170,14 @@ body.dark .map-wrap iframe { --map-filter: invert(0.9) hue-rotate(180deg); }
 
 /* FOOTER */
 .site-footer { background: var(--ink); color: #eaf2e4; margin-top: 4rem; padding: 3rem 0 1.5rem; }
+body.dark .site-footer { background: #141a10; color: #e8efe0; }
+body.dark .footer-tag { color: #a7b89a; }
+body.dark .footer-brand { color: #fff; }
+body.dark .footer-list a, body.dark .footer-socials a { color: #e8efe0; }
+body.dark .footer-list a:hover, body.dark .footer-socials a:hover { color: #fff; }
+body.dark .footer-bottom { border-top-color: rgba(255,255,255,.12); color: #9bb389; }
+body.dark .footer-map { border-color: #5f7a52; color: #e8efe0; }
+body.dark .footer-map:hover { background: #5f7a52; color: #fff; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; }
 .footer-brand { font-family: 'Fraunces', Georgia, serif; font-size: 1.4rem; margin: 0 0 .5rem; color: #fff; }
 .footer-tag { color: #a9c39a; margin: 0; font-size: .95rem; }
