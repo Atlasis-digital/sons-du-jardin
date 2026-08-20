@@ -49,18 +49,18 @@ function Gallery() {
   );
 }
 
-// Aperçu galerie sur l'accueil : 2 tuiles seulement (le reste va dans l'onglet /gallery)
+// Aperçu galerie sur l'accueil : 8 images dans le meme layout bento que la galerie (le reste va dans /gallery)
 function GalleryPreview() {
   const { lang } = useI18n();
   const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
-  const preview = gallery.slice(0, 2);
-  const shapes = ['bento-big', 'bento-h'];
+  const preview = gallery.slice(0, 8);
+  const shapeClass: Record<string, string> = { big: 'bento-big', h: 'bento-h', sq: 'bento-sq' };
   return (
     <section style={{ paddingTop: '2rem', paddingBottom: '1rem' }}>
       <div className="container">
-        <div className="bento" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        <div className="bento">
           {preview.map((g, i) => (
-            <Reveal key={i} className={shapes[i] ?? 'bento-sq'}>
+            <Reveal key={i} delay={(i % 4) * 0.06} className={shapeClass[g.shape]}>
               <img className="bento-img" src={g.src} alt="" loading="lazy" />
             </Reveal>
           ))}
