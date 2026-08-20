@@ -44,9 +44,9 @@ export const gallery: { src: string; shape: GalleryShape }[] = GALLERY_LAYOUT.ma
 export const contact = {
   name: 'Les sons du jardin',
   nameAr: 'أصوات الحديقة',
-  phone: '+216 98 277 380',
-  phoneDisplay: '+216 98 277 380',
-  whatsapp: '21698277380',
+  phone: '+216 29 545 979',
+  phoneDisplay: '+216 29 545 979',
+  whatsapp: '21629545979',
   address: 'Avenue Hedi Khfecha, Skanes 5000, Monastir, Tunisie',
   city: 'Skanes, Monastir',
   rating: '4.81',
@@ -57,9 +57,8 @@ export const contact = {
   mapsEmbed: 'https://www.google.com/maps?q=Les+sons+du+jardin+Skanes+Monastir&output=embed',
   mapsDir: 'https://www.google.com/maps/dir/?api=1&destination=Les+sons+du+jardin+Skanes+Monastir',
   socials: {
-    facebook: 'https://facebook.com/',
-    instagram: 'https://instagram.com/',
-    // Ajoute ici les vrais liens quand tu les as
+    facebook: 'https://www.facebook.com/p/Les-Sons-du-Jardin-100076003204108/?locale=fr_FR',
+    instagram: 'https://www.instagram.com/les_sons_du_jardin/',
   },
 };
 
