@@ -132,6 +132,11 @@ textarea.field { min-height: 90px; resize: vertical; }
 
 body.dark { --bg: #181f15; --surface: #232c1d; --ink: #e8efe0; --muted: #a7b89a; --line: #333f2b; --feuille: #7fae54; --olive: #9bae5e; --terracotta: #d2734a; }
 body.dark .box, body.dark .box-clay { background: #1f271a; }
+body.dark .box { background: #1f271a; color: #e8efe0; border-color: #333f2b; }
+body.dark .chip { background: #232c1d; border-color: #333f2b; }
+body.dark .prose { color: #d7e0cf; }
+body.dark .muted { color: #a7b89a; }
+body.dark .rule { background: #333f2b; }
 body.dark .chip { background: #232c1d; border-color: #333f2b; }
 body.dark .res-form input, body.dark .field { background: #181f15; color: #e8efe0; border-color: #333f2b; }
 body.dark input[type="time"], body.dark input[type="date"] {
