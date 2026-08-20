@@ -408,7 +408,7 @@ function Rooms() {
 function Home() {
   const { lang } = useI18n();
   const t = (k: keyof typeof i18n): string => i18n[k][lang] as unknown as string;
-  useSeo({ title: `${contact.name} — Maison d'hôtes, Skanes`, description: t('hero_lead'), url: 'https://wiliwow.github.io/sons-du-jardin/' });
+  useSeo({ title: `${contact.name} — Maison de charme, Skanes`, description: t('hero_lead'), url: 'https://wiliwow.github.io/sons-du-jardin/' });
   return (
     <>
       <JsonLd data={jsonLd} />
