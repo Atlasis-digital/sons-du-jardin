@@ -245,8 +245,8 @@ function Reservation() {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-            <label style={{ flex: '1 1 160px' }}>{t('arrival_time') || 'Heure arriv.'}<input type="time" value={arrivalTime} onChange={e => setArrivalTime(e.target.value)} /></label>
-            <label style={{ flex: '1 1 160px' }}>{t('departure_time') || 'Heure départ'}<input type="time" value={departureTime} onChange={e => setDepartureTime(e.target.value)} /></label>
+            <label style={{ flex: '1 1 160px' }}>{t('arrival_time') || 'Heure arriv.'}<input className="field" type="time" value={arrivalTime} onChange={e => setArrivalTime(e.target.value)} /></label>
+            <label style={{ flex: '1 1 160px' }}>{t('departure_time') || 'Heure départ'}<input className="field" type="time" value={departureTime} onChange={e => setDepartureTime(e.target.value)} /></label>
           </div>
           <textarea className="field" placeholder={lang === 'ar' ? 'رسالتك' : lang === 'en' ? 'Your message' : 'Message optionnel'} value={msg} onChange={e => setMsg(e.target.value)} style={{ marginTop: '1rem' }} />
           <div className="hp-field" style={{ position: 'absolute', left: '-9999px' }}>
@@ -325,7 +325,7 @@ function Contact() {
               <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                 <label style={{ flex: '1 1 160px' }}>{t('arrival')}<input value={arrivalDate} onChange={e => setArrivalDate(e.target.value)} type="date" /></label>
                 <label style={{ flex: '1 1 160px' }}>{t('departure')}<input value={departureDate} onChange={e => setDepartureDate(e.target.value)} type="date" /></label>
-                <label style={{ flex: '1 1 160px' }}>{t('time')}<input value={heure} onChange={e => setHeure(e.target.value)} type="time" /></label>
+                <label style={{ flex: '1 1 160px' }}>{t('time')}<input className="field" value={heure} onChange={e => setHeure(e.target.value)} type="time" /></label>
               </div>
               <textarea className="field" placeholder={lang === 'ar' ? 'رسالتك' : lang === 'en' ? 'Your message' : 'Votre message'} value={msg} onChange={e => setMsg(e.target.value)} style={{ marginTop: '1rem' }} />
               <div className="hp-field" style={{ position: 'absolute', left: '-9999px' }}>
