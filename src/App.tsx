@@ -513,7 +513,7 @@ function Shell() {
   const loc = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   useEffect(() => { const onS = () => setScrolled(window.scrollY > 30); window.addEventListener('scroll', onS); return () => window.removeEventListener('scroll', onS); }, []);
   useEffect(() => { document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr'); }, [lang]);
   useEffect(() => { document.body.classList.toggle('dark', dark); }, [dark]);
