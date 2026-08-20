@@ -140,15 +140,20 @@ function Reservation() {
 
   const pickDate = (iso: string) => {
     if (isRed(iso)) { setError(lang === 'ar' ? 'هذا التاريخ محجوز' : lang === 'en' ? 'This date is booked' : 'Cette date est déjà réservée'); return; }
+    // Aucune arrivée OU les deux déjà choisies -> nouvelle sélection (arrivée)
     if (!arrivalDate || (arrivalDate && departureDate)) {
-      // nouvelle sélection : on repart sur arrivée
       setArrivalDate(iso); setDepartureDate(''); setError('');
-    } else {
-      // on a une arrivée, on choisit le départ
-      if (iso <= arrivalDate) { setError(lang === 'ar' ? 'تاريخ المغادرة يجب أن يكون بعد الوصول' : lang === 'en' ? 'Departure must be after arrival' : 'La date de départ doit être après l\'arrivée'); return; }
-      if (rangeOverlaps(arrivalDate, iso)) { setError(lang === 'ar' ? 'هذه الفترة محجوزة' : lang === 'en' ? 'This period is booked' : 'Cette période est déjà réservée'); return; }
-      setDepartureDate(iso); setError('');
+      return;
     }
+    // Arrivée choisie, pas encore de départ
+    if (iso <= arrivalDate) {
+      // Date antérieure ou égale -> on redémarre une nouvelle arrivée (pas d'erreur)
+      setArrivalDate(iso); setDepartureDate(''); setError('');
+      return;
+    }
+    // Date postérieure -> vérifier chevauchement puis valider le départ
+    if (rangeOverlaps(arrivalDate, iso)) { setError(lang === 'ar' ? 'هذه الفترة محجوزة' : lang === 'en' ? 'This period is booked' : 'Cette période est déjà réservée'); return; }
+    setDepartureDate(iso); setError('');
   };
 
   const sendResa = async () => {
