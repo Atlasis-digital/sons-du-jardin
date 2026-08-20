@@ -22,7 +22,7 @@ function Events() {
           {events.map((e) => (
             <Link key={e.slug} to={`/evenements/${e.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', marginBottom: 14 }}>
               <div className="box">
-                {e.cover ? <img src={e.cover} alt="" style={{ width: '100%', borderRadius: 12, marginBottom: 12 }} loading="lazy" /> : <div style={{ height: 120, borderRadius: 12, background: CLAY, marginBottom: 12 }} />}
+                {e.cover && <img src={e.cover} alt="" style={{ width: '100%', borderRadius: 12, marginBottom: 12 }} loading="lazy" />}
                 <div style={{ fontSize: '.75rem', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--terracotta)' }}>{e.dateDisplay}</div>
                 <h3 style={{ margin: '.4rem 0', fontSize: '1.25rem' }}>{e.title}</h3>
                 <p className="muted" style={{ fontSize: '.95rem' }}>{e.excerpt}</p>
